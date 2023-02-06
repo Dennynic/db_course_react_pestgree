@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, FormEvent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
-import ModalWindow from 'components/modal';
+import ClientFormModal from 'components/forms/client_form_modal';
 
 import data from '../../models/auto-client';
 
@@ -39,12 +39,14 @@ class MainPage extends Component<IProps, IState> {
 
   private handleModalOpen = () => {
     this.setState({ isModalOpen: true });
-    
   };
 
   private handleModalClose = () => {
     this.setState({ isModalOpen: false });
-    
+  };
+
+  private handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
   };
 
   render() {
@@ -58,8 +60,8 @@ class MainPage extends Component<IProps, IState> {
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    {this.tableHeaderItems.map((id, headName) => (
-                      <th key={id + headName}>{headName}</th>
+                    {this.tableHeaderItems.map((headName, key) => (
+                      <th key={key + headName}>{headName}</th>
                     ))}
                   </tr>
                 </thead>
@@ -90,36 +92,11 @@ class MainPage extends Component<IProps, IState> {
             </Col>
           </Row>
         </Container>
-        <ModalWindow 
-          isOpen={this.state.isModalOpen} 
-          onClose = {this.handleModalClose}
-          title="Добавить клиента">
-          <form>
-            <div>
-              <label>Фамилия</label>
-              <input type="text" />
-            </div>
-            <div>
-              <label>Имя</label>
-              <input type="text" />
-            </div>
-            <div>
-              <label>Отчество</label>
-              <input type="text" />
-            </div>
-            <div>
-              <label>Телефон</label>
-              <input type="text" />
-            </div>
-            <div>
-              <label>Дата рождения</label>
-              <input type="text" />
-            </div>
-            <div>
-              <input type="button" value="Coхранить" />
-            </div>
-          </form>
-        </ModalWindow>
+        <ClientFormModal
+          onClose={this.handleModalClose}
+          onSubmit={this.handleSubmit}
+          isOpen={this.state.isModalOpen}
+        />
       </section>
     );
   }
