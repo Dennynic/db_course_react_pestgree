@@ -1,8 +1,10 @@
 'use strict';
 const path = require('path');
+const webpack = require('webpack');
 
 const { ASSETS_HOST, ASSETS_PORT } = process.env;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const public_path = path.join(__dirname, 'static');
 const src_path = path.resolve(__dirname, 'src');
@@ -41,13 +43,16 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     static: {
-      directory: path.join(__dirname, 'static'),
+      directory: public_path,
       publicPath: '/',
     },
 
     host: ASSETS_HOST,
     port: ASSETS_PORT,
   },
+
+  devtool: "inline-source-map",
+
   module: {
     rules: [
       {
@@ -84,25 +89,40 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: {
-              localIdentName: '[path]__[local]___[contenthash:base64:5]',
-              }
+                localIdentName: '[path]__[local]___[contenthash:base64:5]',
+              },
             },
           },
           'postcss-loader',
           'sass-loader',
         ],
+        include: [path.resolve(__dirname, 'src')],
       },
 
-      {
+       {
         // SCSS styles
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: { publicPath: 'dist/css' },
+          },
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ],
         include: [path.resolve(__dirname, 'stylesheets')],
       },
-
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: { publicPath: 'dist/css' },
+          },
+          'css-loader',
+          'postcss-loader',
+        ],
       },
       {
         test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
@@ -114,6 +134,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Car Base Parking',
       template: path.join(__dirname, 'static', 'index.html'),
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].bundle.[hash].css',
+    }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
     }),
   ],
 };
