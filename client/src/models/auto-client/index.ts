@@ -1,11 +1,11 @@
 const data = [
   {
     id: 1,
-    name: 'Иван',
-    lastName: 'Иванов',
-    secondName: 'Иванович',
+    first_name: 'Иван',
+    last_name: 'Иванов',
+    second_name: 'Иванович',
     phone: '9194021523',
-    birtDate: '10.02.1989',
+    birth_date: '10.02.1989',
     modelAuto: 'Lada',
     markAuto: 'Kalina',
     autoiId: 'a784oa774',
@@ -14,15 +14,15 @@ const data = [
     parckPrice: 300,
     summPaymeyment: 600,
     datePayment: '19.01.2023',
-    startPayment: '21.01.2010' 
+    startPayment: '21.01.2010',
   },
   {
     id: 2,
-    name: 'Иван',
-    lastName: 'Иванов',
-    secondName: 'Иванович',
+    first_name: 'Иван',
+    last_name: 'Иванов',
+    second_name: 'Иванович',
     phone: '9194021523',
-    birtDate: '10.02.1989',
+    birth_date: '10.02.1989',
     modelAuto: 'Lada',
     markAuto: 'Kalina1',
     autoiId: 'a784oa775',
@@ -31,15 +31,15 @@ const data = [
     parckPrice: 300,
     summPaymeyment: 600,
     datePayment: '20.01.2023',
-    startPayment: '21.01.2010' 
+    startPayment: '21.01.2010',
   },
   {
     id: 3,
-    name: 'Иван',
-    lastName: 'Иванов',
-    secondName: 'Иванович',
+    first_name: 'Иван',
+    last_name: 'Иванов',
+    second_name: 'Иванович',
     phone: '9194021523',
-    birtDate: '10.02.1989',
+    birth_date: '10.02.1989',
     modelAuto: 'Lada',
     markAuto: 'Kalina3',
     autoiId: 'a785oa775',
@@ -48,15 +48,15 @@ const data = [
     parckPrice: 300,
     summPaymeyment: 600,
     datePayment: '20.01.2023',
-    startPayment: '21.01.2010' 
+    startPayment: '21.01.2010',
   },
   {
     id: 4,
-    name: 'Иван',
-    lastName: 'Иванов',
-    secondName: 'Иванович',
+    first_name: 'Иван',
+    last_name: 'Иванов',
+    second_name: 'Иванович',
     phone: '9194021523',
-    birtDate: '10.02.1989',
+    birth_date: '10.02.1989',
     modelAuto: 'Lada',
     markAuto: 'Kalina5',
     autoiId: 'a786oa775',
@@ -65,8 +65,8 @@ const data = [
     parckPrice: 300,
     summPaymeyment: 600,
     datePayment: '20.01.2023',
-    startPayment: '21.01.2010' 
-  }
-]
+    startPayment: '21.01.2010',
+  },
+];
 
 export default data;
