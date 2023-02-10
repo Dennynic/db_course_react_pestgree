@@ -29,7 +29,7 @@ class ClientController {
         //include: [{ model: CarInfo, as: 'car' }],
       });
 
-      return res.json(device);
+      return res.json(client);
     } catch (error) {
       console.log('Error:', error);
       //next(ApiError.badRequest(error.message));
