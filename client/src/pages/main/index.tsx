@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import ClientFormModal from 'components/forms/client_form_modal';
 import { IClient } from '../../models/client';
-import ClientService from '../../models/http/clientService';
+import ClientService from '../../models/store/clientService';
 
 import data from '../../models/auto-client';
 

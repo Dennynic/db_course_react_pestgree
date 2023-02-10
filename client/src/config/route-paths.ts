@@ -1,6 +1,5 @@
 import MainPage from '../pages/main';
 import CarPage from '../pages/car';
-import ClientPage from '../pages/client';
 import PlacePage from '../pages/place';
 import PaymentPage from '../pages/payment';
 import ReportPage from '../pages/report';
@@ -23,10 +22,7 @@ export const publicRoutes = [
     path: CAR_PAGE,
     Component: CarPage,
   },
-  {
-    path: CLIENT_PAGE,
-    Component: ClientPage,
-  },
+  
   {
     path: PLACE_PAGE,
     Component: PlacePage,
