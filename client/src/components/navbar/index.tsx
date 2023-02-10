@@ -4,12 +4,16 @@ import Nav from 'react-bootstrap/Nav';
 import NavMenu from '../navbar/nav-menu';
 import css from './index.scss';
 
-import { MAIN_PAGE, REPORT_PAGE, PLACE_PAGE, CAR_PAGE } from 'config/consts';
+import { MAIN_PAGE, REPORT_PAGE, PLACE_PAGE, CAR_PAGE, CLIENT_PAGE } from 'config/consts';
 
 const menuItems = [
   {
     title: 'Авто-Клиент',
     itemLink: MAIN_PAGE
+  },
+  {
+    title: 'Клиент',
+    itemLink: CLIENT_PAGE,
   },
   {
     title: 'Авто',
