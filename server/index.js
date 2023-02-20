@@ -3,7 +3,7 @@ const express = require('express');
 const sequelize = require('./db');
 const cors = require('cors');
 const router = require('./routes/index');
-//const errorHandler = require('./middleware/errorHandlingMiddleware');
+const errorHandler = require('./middleware/errorHandlingMiddleware');
 const path = require('path');
 
 const PORT = process.env.PORT || 3090;
@@ -16,7 +16,7 @@ app.use(express.static(path.resolve(__dirname, 'static')));
 app.use('/api', router);
 
 // Error Handler
-//app.use(errorHandler)
+app.use(errorHandler)
 
 const start = async () => {
   try {

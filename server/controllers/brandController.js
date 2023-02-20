@@ -1,11 +1,18 @@
-const { CarBrand } = require('../models/models');
+const { CarBrand } = require('../models');
+const ApiError = require('../error/ApiError');
+
 //const ApiError = require('../error/ApiError');
 
 class BrandController {
-  async create(req, res) {
+  async create(req, res, next) {
     const { title } = req.body;
-    const carBrand = await CarBrand.create({ title });
-    return res.json(carBrand);
+    try{
+      const carBrand = await CarBrand.create({ title })
+      return res.json(carBrand);
+    }
+    catch(error){
+      next(ApiError.badRequest(error));
+    };
   }
 
   async getAll(req, res) {
@@ -14,4 +21,4 @@ class BrandController {
   }
 }
 
-module.exports= new BrandController();
+module.exports = new BrandController();

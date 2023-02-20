@@ -1,16 +1,16 @@
 import { CarModel } from '../../models';
 
-class BrandModel {
+class CarBrandModel {
   private _id: number | null;
-  private _title: String;
-  private _items: CarModel[];
+  private _title: string;
+  private _models: CarModel[];
   private _selectedBrand: number | null;
   private _selectedModel: number | null;
 
   constuctor() {
     this._id = null;
     this._title = '';
-    this._items = [];
+    this._models = [];
     this._selectedBrand = null;
     this._selectedModel = null;
   }
@@ -19,12 +19,12 @@ class BrandModel {
     this._id = id;
   }
 
-  setTitle(title: String) {
+  setTitle(title: string) {
     this._title = title;
   }
 
-  setItems(items: []) {
-    this._items = items;
+  setItems(item: []) {
+    this._models = item;
   }
 
   setSelectedBrand(id: number) {
@@ -34,16 +34,16 @@ class BrandModel {
     this._selectedModel = id;
   }
 
-  get id() {
+  get carid() {
     return this._id;
   }
 
-  get title() {
+  get brand() {
     return this._title;
   }
 
-  get items() {
-    return this._items;
+  get models() {
+    return this._models;
   }
 
   get selectedBrand() {
@@ -55,4 +55,4 @@ class BrandModel {
   }
 }
 
-export default BrandModel;
+export default CarBrandModel;

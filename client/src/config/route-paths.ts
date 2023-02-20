@@ -1,5 +1,6 @@
 import MainPage from '../pages/main';
-import CarPage from '../pages/car';
+//import CarPage from '../pages/car';
+import ClientPage from '../pages/client';
 import PlacePage from '../pages/place';
 import PaymentPage from '../pages/payment';
 import ReportPage from '../pages/report';
@@ -18,9 +19,13 @@ export const publicRoutes = [
     path: MAIN_PAGE,
     Component: MainPage,
   },
+  // {
+  //   path: CAR_PAGE,
+  //   Component: CarPage,
+  // },
   {
-    path: CAR_PAGE,
-    Component: CarPage,
+    path: CLIENT_PAGE + '/:id',
+    Component: ClientPage,
   },
   
   {

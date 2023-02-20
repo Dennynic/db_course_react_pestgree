@@ -1,0 +1,22 @@
+import { Client, Car } from '../../models';
+
+class CarClientModel {
+  private _client: Client;
+  private _cars: Car[];
+
+  constructor( client: Client, cars: Car[] ) {
+    this._client = client;
+    this._cars = cars;
+  }
+
+  get client() {
+    return this._client;
+  }
+
+  get cars() {
+    return this._cars;
+  }
+
+}
+
+export default CarClientModel;

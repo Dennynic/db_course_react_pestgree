@@ -1,4 +1,4 @@
-import { $host } from '../lib';
+import { $host } from './lib';
 
 
 const findAll = async () => {

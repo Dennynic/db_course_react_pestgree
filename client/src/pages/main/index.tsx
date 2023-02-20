@@ -1,20 +1,26 @@
-import React, { Component, FormEvent } from 'react';
+import React, { Component} from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import ClientFormModal from 'components/forms/client_form_modal';
-import { IClient } from '../../models/client';
-import ClientService from '../../models/store/clientService';
-
-import data from '../../models/auto-client';
-
-interface IProps {}
+import Client from '../../models/client';
+import ClientCollectionStore from '../../store/client-colection-store';
+import { CarClientModel } from '../../models';
+import { inject, observer } from 'mobx-react';
+import { NavLink } from 'react-router-dom';
+import {  CLIENT_PAGE } from 'config/consts';
+interface IProps {
+  clientsStore?: typeof ClientCollectionStore;
+}
 
 interface IState {
   isModalOpen: boolean;
-  client: IClient | undefined;
+  client: Client | undefined;
 }
 
+
+@inject('clientsStore')
+@observer
 class MainPage extends Component<IProps, IState> {
   private tableHeaderItems = [
     '№',
@@ -39,7 +45,14 @@ class MainPage extends Component<IProps, IState> {
       client: undefined,
     };
   }
-  componentDidMount(): void {}
+  componentDidMount(): void {
+    
+    this.fetchClient();
+  }
+
+  private fetchClient() {
+    this.props.clientsStore?.fetchAllClientInfo();
+  }
 
   private handleModalOpen = () => {
     this.setState({ isModalOpen: true, client: undefined });
@@ -53,14 +66,16 @@ class MainPage extends Component<IProps, IState> {
     this.setState({ client: item, isModalOpen: true });
   };
 
-  private handleSubmit = (clientData: IClient) => {
-    const res = ClientService.create(clientData).then(data =>
+  private handleSubmit = (clientData: Client) => {
+    const res = this.props.clientsStore?.create(clientData).then(data =>
       console.log('Клиент добавлен', data),
     );
   };
 
   render() {
-    console.log('State', this.state);
+    
+    const carClients = this.props.clientsStore?.carClients;
+    
     return (
       <section>
         <Container>
@@ -76,27 +91,42 @@ class MainPage extends Component<IProps, IState> {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map(item => {
-                    const fio = `${item.first_name} ${item.last_name} ${item.second_name}`;
-                    const auto = `${item.modelAuto} ${item.markAuto}`;
+                  {carClients!.map((item: CarClientModel, key) => {
+                    
+                    const {
+                      carId,
+                      clientId,
+                      fullName,
+                      model,
+                      brand,
+                      phone,
+                      bDate,
+                      regNumber,
+                      year,
+                      parkPlace,
+                      parkPrice,
+                      summPayment,
+                      datePayment,
+                      startPayment,
+                    } = item;
+                    const carModel = brand && model ? `${brand} ${model}` : "-";
                     return (
-                      <tr key={item.id + item.phone}>
-                        <td>{item.id}</td>
+                      <tr key={clientId + key}>
+                        <td>{key+1}</td>
                         <td>
-                          <button onClick={() => this.handleEditClient(item)}>
-                            {fio}
-                          </button>
+                          <NavLink to={`${CLIENT_PAGE}/${clientId}`}>{fullName}</NavLink>
+                            
                         </td>
-                        <td>{item.birth_date}</td>
-                        <td>{item.phone}</td>
-                        <td>{auto}</td>
-                        <td>{item.autoiId}</td>
-                        <td>{item.yearAuto}</td>
-                        <td>{item.parckPlace}</td>
-                        <td>{item.parckPrice}</td>
-                        <td>{item.summPaymeyment}</td>
-                        <td>{item.datePayment}</td>
-                        <td>{item.startPayment}</td>
+                        <td>{bDate}</td>
+                        <td>{phone}</td>
+                        <td>{carModel}</td>
+                        <td>{regNumber || '-'}</td>
+                        <td>{year || '-'}</td>
+                        <td>{parkPlace || '-'}</td>
+                        <td>{parkPrice || '-'}</td>
+                        <td>{summPayment || '-'}</td>
+                        <td>{datePayment || '-'}</td>
+                        <td>{startPayment || '-'}</td>
                       </tr>
                     );
                   })}

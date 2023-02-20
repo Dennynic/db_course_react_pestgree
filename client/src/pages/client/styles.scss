@@ -1,0 +1,43 @@
+.clientInfoWrapper {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.clientInfoBlock {
+  margin-top: 20px;
+}
+
+.clientInfoSection {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  div {
+    width: 100%;
+    padding-right: 100px;
+  }
+}
+
+.clientInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  p {
+    border-bottom: 1px solid #837e7e;
+    font-size: 1.4vh;
+  }
+
+  span {
+    font-weight: 600;
+  }
+}
+
+.actionButton {
+  margin-top: 10px;
+  button {
+    background: none;
+    font-size: 1.2vh;
+    font-variant: small-caps;
+    color: #7272a7;
+    border-bottom: 1px solid;
+  }
+}

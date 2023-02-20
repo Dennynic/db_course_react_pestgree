@@ -121,6 +121,7 @@ module.exports = {
             options: { publicPath: 'dist/css' },
           },
           'css-loader',
+          'style-loader',
           'postcss-loader',
         ],
       },
