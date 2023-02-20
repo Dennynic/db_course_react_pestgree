@@ -1,8 +1,9 @@
 import React from 'react';
-import CarBrandsStore from 'models/store/car-brands-store';
+import CarBrandsStore from 'store/car-brands-store';
+import clientsStore from 'store/client-colection-store';
 
 const Context = React.createContext({
   carBrandsStore: CarBrandsStore,
-  device: '',
+  clientsStore,
 });
 export { Context };

@@ -3,16 +3,16 @@ const { DataTypes } = require('sequelize');
 
 const Client = sequelize.define('client', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  first_name: { type: DataTypes.STRING, allowNull: false },
-  last_name: { type: DataTypes.STRING, allowNull: false },
-  second_name: { type: DataTypes.STRING, allowNull: false },
+  firstName: { type: DataTypes.STRING, allowNull: false },
+  lastName: { type: DataTypes.STRING, allowNull: false },
+  secondName: { type: DataTypes.STRING, allowNull: false },
   phone: { type: DataTypes.STRING, unique: true, allowNull: false },
-  birth_date: { type: DataTypes.STRING, allowNull: false },
+  bDate: { type: DataTypes.STRING, allowNull: false },
 });
 
 const Auto = sequelize.define('auto', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  reg_number: { type: DataTypes.STRING, allowNull: false, unique: true },
+  regNumber: { type: DataTypes.STRING, allowNull: false, unique: true },
   year: { type: DataTypes.STRING, allowNull: false },
 });
 
@@ -22,7 +22,7 @@ const AutoClient = sequelize.define('auto_client', {
 
 const CarModel = sequelize.define('car_model', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  title: { type: DataTypes.STRING, allowNull: false },
+  title: { type: DataTypes.STRING, unique: true, allowNull: false },
 });
 
 const CarBrand = sequelize.define('car_brand', {

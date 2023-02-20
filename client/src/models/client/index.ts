@@ -1,54 +1,53 @@
-import { observable } from 'mobx';
-
-export interface IClient {
-  id?: any | null;
-  first_name: string;
-  last_name: string;
-  second_name: string;
-  phone: string;
-  birth_date: string;
-}
-
-@observable
+import Car from 'models/car';
 class Client {
   private _id: number | null;
-  private _firstName: String | null;
-  private _lastName: String | null;
-  private _secondName: String | null;
-  private _phone: String | null;
-  private _bDate: String | null;
+  private _firstName: string;
+  private _lastName: string;
+  private _secondName: string;
+  private _phone: string;
+  private _bDate: string;
+  private _cars: Car[];
 
-  constuctor() {
+  constructor() {
     this._id = null;
-    this._firstName = null;
-    this._lastName = null;
-    this._secondName = null;
-    this._phone = null;
-    this._bDate = null;
+    this._firstName = '';
+    this._lastName = '';
+    this._secondName = '';
+    this._phone = '';
+    this._bDate = '';
+    this._cars = [];
   }
 
   setId(id: number) {
     this._id = id;
   }
 
-  setFirstName(first_name: String) {
+  setFirstName(first_name: string) {
     this._firstName = first_name;
   }
 
-  setLastName(last_name: String) {
+  setLastName(last_name: string) {
     this._lastName = last_name;
   }
 
-  setSecondName(second_name: String) {
+  setSecondName(second_name: string) {
     this._secondName = second_name;
   }
 
-  setPhone(phone: String) {
+  setPhone(phone: string) {
     this._phone = phone;
   }
 
-  setbDate(birth_date: String) {
+  setbDate(birth_date: string) {
     this._bDate = birth_date;
+  }
+
+  setCars(cars: Car[]) {
+    const carsArr = cars.map((car) => {
+      const _car = new Car({...car});
+      return _car;
+    })
+    this._cars = carsArr;
   }
 
   get id() {
@@ -73,6 +72,14 @@ class Client {
 
   get bDate() {
     return this._bDate;
+  }
+
+  get cars() {
+    return this._cars;
+  }
+
+  get fullName() {
+    return `${this.lastName} ${ this.firstName} ${this.secondName}`;
   }
 }
 

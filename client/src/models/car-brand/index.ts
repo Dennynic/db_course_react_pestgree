@@ -1,13 +1,8 @@
-import { observable } from 'mobx';
-
-
 class CarBrand {
-  @observable private _id: number | null;
-  @observable private _title: String;
-  
-  
+  private _id: number | null;
+  private _title: string;
 
-  constuctor(){
+  constuctor() {
     this._id = null;
     this._title = '';
   }
@@ -16,7 +11,7 @@ class CarBrand {
     this._id = id;
   }
 
-  setTitle(title: String){
+  setTitle(title: string) {
     this._title = title;
   }
 
@@ -27,7 +22,6 @@ class CarBrand {
   get title() {
     return this._title;
   }
-
 }
 
 export default CarBrand;

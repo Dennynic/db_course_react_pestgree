@@ -44,11 +44,19 @@ class AutoController {
     const query = `
     SELECT car_brands.id as id,
       car_brands.title,
-      jsonb_agg(to_jsonb(car_models)) as item
+      jsonb_agg(to_jsonb(car_models)) as models
     FROM brand_models
     JOIN public.car_models ON car_models.id = brand_models."carModelId"
     JOIN public.car_brands ON car_brands.id = brand_models."carBrandId"
     GROUP BY car_brands.id;
+    `
+
+    const query2 = `
+    SELECT car_brands.id as carId, car_brands.title as brand, case when count(car_models) = 0 then '[]' else json_agg(to_json(car_models)) end as models
+    FROM car_brands
+    LEFT JOIN brand_models ON brand_models."carBrandId" = car_brands.id
+    LEFT JOIN car_models ON car_models.id = brand_models."carModelId"
+    GROUP BY car_brands.id
     `
     try {
       //let { brandId, typeId } = req.query;
@@ -57,7 +65,7 @@ class AutoController {
       //let offset = page * limit - limit;
       //const params = { limit, offset };
 
-      let carModel = await sequelize.query(query);
+      let carModel = await sequelize.query(query2);
 
       // if (!brandId && !typeId) {
       //   devices = await Device.findAndCountAll({ ...params });

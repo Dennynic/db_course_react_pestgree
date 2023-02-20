@@ -1,11 +1,12 @@
 import React, { Component, FormEvent } from 'react';
 import FormModal from '../form_modal';
 import Form from 'react-bootstrap/Form';
-import { IClient } from '../../../models/client';
+import Client from '../../../models/client';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 interface IProps {
-  client?: IClient;
+  client?: Client;
   onClose: () => void;
   isOpen: boolean;
   onSubmit: (client: any) => void;
@@ -13,20 +14,20 @@ interface IProps {
 }
 
 interface IState {
-  first_name: string;
-  last_name: string;
-  second_name: string;
+  firstName: string;
+  lastName: string;
+  secondName: string;
   phone: string;
-  birth_date: string;
+  bDate: string;
 }
 
 class ClientFormModal extends Component<IProps, IState> {
   static defaultProps = {
-    first_name: '',
-    last_name: '',
-    second_name: '',
+    firstName: '',
+    lastName: '',
+    secondName: '',
     phone: '',
-    birth_date: '',
+    bDate: '',
   };
   state: IState = {
     ...ClientFormModal.defaultProps,
@@ -35,14 +36,14 @@ class ClientFormModal extends Component<IProps, IState> {
   componentDidUpdate(prevProps: IProps) {
     if (prevProps.client !== this.props.client) {
       if (this.props.client) {
-        const { first_name, last_name, second_name, phone, birth_date } =
+        const { firstName, lastName, secondName, phone, bDate } =
           this.props.client!;
         this.setState({
-          first_name,
-          last_name,
-          second_name,
+          firstName,
+          lastName,
+          secondName,
           phone,
-          birth_date,
+          bDate,
         });
       } else {
         this.setState({ ...ClientFormModal.defaultProps });
@@ -53,18 +54,18 @@ class ClientFormModal extends Component<IProps, IState> {
   private handleLastNameChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    this.setState({ last_name: event.target.value.trim() });
+    this.setState({ lastName: event.target.value.trim() });
   };
   private handleFirstNameChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    this.setState({ first_name: event.target.value.trim() });
+    this.setState({ firstName: event.target.value.trim() });
   };
 
   private handleSecondNameChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    this.setState({ second_name: event.target.value.trim() });
+    this.setState({ secondName: event.target.value.trim() });
   };
 
   private handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,38 +73,32 @@ class ClientFormModal extends Component<IProps, IState> {
   };
 
   private handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ birth_date: event.target.value.trim() });
+    this.setState({ bDate: event.target.value.trim() });
   };
 
   private handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const { birth_date, first_name, last_name, second_name, phone } =
-      this.state;
-    this.props.onSubmit({
-      birth_date,
-      first_name,
-      last_name,
-      second_name,
-      phone,
-    });
+    const { firstName, lastName, secondName, phone, bDate } = this.state;
+    console.log('Handle state', this.state);
+    this.props.onSubmit({...this.props.client, ...this.state})
+      
   };
 
   render() {
     const { onClose, isOpen, client } = this.props;
-    const { birth_date, first_name, last_name, second_name, phone } =
-      this.state;
-    const validDate = moment(birth_date).format('YYYY-MM-DD');
+    const { firstName, lastName, secondName, phone, bDate } = this.state;
+    const validDate = moment(bDate).format('YYYY-MM-DD');
     const maxDate = moment().subtract(18, 'year').format('YYYY-MM-DD');
-    const title = client ? 'Edit' : 'Add';
+    const title = client ? 'Редактировать' : 'Добавить';
     return (
       <FormModal onClose={onClose} isOpen={isOpen}>
-        <FormModal.Header title={`${title} client`} />
+        <FormModal.Header title={`${title} клиента`} />
         <FormModal.Form onClose={onClose} onSubmit={this.handleSubmit}>
           <Form.Group className="mb-3" controlId="LastNameControl">
             <Form.Label>Фамилия</Form.Label>
             <Form.Control
               onChange={this.handleLastNameChange}
-              value={last_name}
+              value={lastName}
               type="text"
               placeholder="Иванов"
               required
@@ -113,7 +108,7 @@ class ClientFormModal extends Component<IProps, IState> {
             <Form.Label>Имя</Form.Label>
             <Form.Control
               onChange={this.handleFirstNameChange}
-              value={first_name}
+              value={firstName}
               type="text"
               placeholder="Иван"
               required
@@ -123,7 +118,7 @@ class ClientFormModal extends Component<IProps, IState> {
             <Form.Label>Отчество</Form.Label>
             <Form.Control
               onChange={this.handleSecondNameChange}
-              value={second_name}
+              value={secondName}
               type="text"
               placeholder="Иванович"
               required
