@@ -1,6 +1,6 @@
 class CarModel {
   private _id: number | null;
-  private _title: String;
+  private _title: string;
 
   constuctor() {
     this._id = null;
@@ -11,7 +11,7 @@ class CarModel {
     this._id = id;
   }
 
-  setTitle(title: String) {
+  setTitle(title: string) {
     this._title = title;
   }
 

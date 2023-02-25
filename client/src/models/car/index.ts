@@ -1,18 +1,23 @@
-
+import { $host } from '../../store/lib';
+import {Place} from '../../models'
 class Car {
    private _id: number ;
    private _regNumber: string;
-   private _year: number ;
+   private _year: string ;
+   //private _brandId: string;
    private _brand: string;
+   //private _modelId: string;
    private _model: string;
+   private _place: Place;
 
   
-  constructor({id, regNumber, year, brand, model}: any){
+  constructor({id, regNumber, year, brand, model, place, price, startDate}: any){
     this._id = id;
     this._regNumber = regNumber;
     this._year = year;
     this._brand = brand;
     this._model = model;
+    this._place = new Place({price, place, startDate, autoId:id});
   }
 
   set id(id: number) {
@@ -23,7 +28,7 @@ class Car {
     this._regNumber = regNumber;
   }
 
-  set year(year: number){
+  set year(year: string){
     this._year = year;
   }
 
@@ -33,6 +38,10 @@ class Car {
 
   set model(model: string){
     this._model = model;
+  }
+
+  set place(place: Place){
+    this._place = place;
   }
 
   get id() {
@@ -53,6 +62,10 @@ class Car {
 
   get model(){
     return this._model;
+  }
+
+  get place(){
+    return this._place;
   }
 
   get fullModel(){

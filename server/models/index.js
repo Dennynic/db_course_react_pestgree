@@ -8,36 +8,50 @@ const Client = sequelize.define('client', {
   secondName: { type: DataTypes.STRING, allowNull: false },
   phone: { type: DataTypes.STRING, unique: true, allowNull: false },
   bDate: { type: DataTypes.STRING, allowNull: false },
+},{
+  timestamps: false
 });
 
 const Auto = sequelize.define('auto', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   regNumber: { type: DataTypes.STRING, allowNull: false, unique: true },
   year: { type: DataTypes.STRING, allowNull: false },
+},{
+  timestamps: false
 });
 
 const AutoClient = sequelize.define('auto_client', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+},{
+  timestamps: false
 });
 
 const CarModel = sequelize.define('car_model', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, unique: true, allowNull: false },
+},{
+  timestamps: false
 });
 
 const CarBrand = sequelize.define('car_brand', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, unique: true, allowNull: false },
+},{
+  timestamps: false
 });
 
 const BrandModel = sequelize.define('brand_model', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+},{
+  timestamps: false
 });
 
 const Payment = sequelize.define('payment', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   summ: { type: DataTypes.FLOAT,  allowNull: false },
   date: { type: DataTypes.STRING, allowNull: false },
+},{
+  timestamps: false
 });
 
 const Place = sequelize.define('place', {
@@ -45,6 +59,8 @@ const Place = sequelize.define('place', {
   price: { type: DataTypes.INTEGER,  allowNull: true },
   isVacant: { type: DataTypes.BOOLEAN, defaultValue: true},
   startDate: { type: DataTypes.STRING, allowNull: true }
+},{
+  timestamps: false
 });
 
 
@@ -68,13 +84,13 @@ Place.hasMany(Payment);
 Payment.belongsTo(Place);
 
 
-
 module.exports = {
   Client,
   Auto,
   CarModel,
   CarBrand,
   BrandModel,
-  AutoClient
+  AutoClient,
+  Place,
 
 };
