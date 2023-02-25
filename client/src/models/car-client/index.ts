@@ -11,11 +11,11 @@ class CarClientModel {
   private _brand: string;
   private _regNumber: string;
   private _year: number;
-  private _parkPlace: number;
-  private _parkPrice: number;
+  private _placeid: number;
+  private _price: number;
   private _summPayment: number;
   private _datePayment: string;
-  private _startPayment: string;
+  private _startDate: string;
   
 
 
@@ -31,11 +31,11 @@ class CarClientModel {
     model,
     regNumber,
     year,
-    parkPlace,
-    parkPrice,
+    placeid,
+    price,
     summPayment,
     datePayment,
-    startPayment,
+    startDate,
   }: any) {
     this._carId = carId;
     this._clientId = clientId;
@@ -48,11 +48,11 @@ class CarClientModel {
     this._brand = brand;
     this._regNumber = regNumber;
     this._year = year;
-    this._parkPlace = parkPlace;
-    this._parkPrice = parkPrice;
+    this._placeid = placeid;
+    this._price = price;
     this._summPayment = summPayment;
     this._datePayment = datePayment;
-    this._startPayment = startPayment;
+    this._startDate = startDate;
   }
 
   // set id(id: number) {
@@ -140,11 +140,11 @@ class CarClientModel {
   get year() {
     return this._year;
   }
-  get parkPlace() {
-    return this._parkPlace;
+  get placeid() {
+    return this._placeid;
   }
-  get parkPrice() {
-    return this._parkPrice;
+  get price() {
+    return this._price;
   }
   get summPayment() {
     return this._summPayment;
@@ -152,8 +152,8 @@ class CarClientModel {
   get datePayment() {
     return this._datePayment;
   }
-  get startPayment() {
-    return this._startPayment;
+  get startDate() {
+    return this._startDate;
   }
   get fullName() {
     return `${this.lastName} ${this.firstName} ${this.secondName}`;

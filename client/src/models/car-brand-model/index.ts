@@ -34,7 +34,7 @@ class CarBrandModel {
     this._selectedModel = id;
   }
 
-  get carid() {
+  get brandid() {
     return this._id;
   }
 

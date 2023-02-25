@@ -75,6 +75,7 @@ class MainPage extends Component<IProps, IState> {
   render() {
     
     const carClients = this.props.clientsStore?.carClients;
+    console.log("carClients", carClients);
     
     return (
       <section>
@@ -94,7 +95,6 @@ class MainPage extends Component<IProps, IState> {
                   {carClients!.map((item: CarClientModel, key) => {
                     
                     const {
-                      carId,
                       clientId,
                       fullName,
                       model,
@@ -103,11 +103,11 @@ class MainPage extends Component<IProps, IState> {
                       bDate,
                       regNumber,
                       year,
-                      parkPlace,
-                      parkPrice,
+                      placeid,
+                      price,
                       summPayment,
                       datePayment,
-                      startPayment,
+                      startDate,
                     } = item;
                     const carModel = brand && model ? `${brand} ${model}` : "-";
                     return (
@@ -122,11 +122,11 @@ class MainPage extends Component<IProps, IState> {
                         <td>{carModel}</td>
                         <td>{regNumber || '-'}</td>
                         <td>{year || '-'}</td>
-                        <td>{parkPlace || '-'}</td>
-                        <td>{parkPrice || '-'}</td>
+                        <td>{placeid || '-'}</td>
+                        <td>{price || '-'}</td>
                         <td>{summPayment || '-'}</td>
                         <td>{datePayment || '-'}</td>
-                        <td>{startPayment || '-'}</td>
+                        <td>{startDate || '-'}</td>
                       </tr>
                     );
                   })}

@@ -43,7 +43,7 @@ class Client {
   }
 
   setCars(cars: Car[]) {
-    const carsArr = cars.map((car) => {
+    const carsArr = cars?.map((car) => {
       const _car = new Car({...car});
       return _car;
     })

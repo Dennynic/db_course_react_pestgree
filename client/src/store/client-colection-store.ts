@@ -38,6 +38,7 @@ class ClientCollectionStore {
 
   async findByIdWithCars(id: number) {
     const response = await $host.get<Client[]>(`/client/all/${id}`);
+    console.log("Response", response.data);
     const data = response.data[0];
     this.setClient(data);
   }
@@ -60,43 +61,7 @@ class ClientCollectionStore {
   }
 }
 
-// const findAll = async () => {
-//   const response = await $host.get<Client[]>('/client');
-//   return response.data;
-// };
 
-// const findById = async (id: any) => {
-//   const response = await $host.get<Client>(`/client/${id}`);
-//   return response.data;
-// };
-
-// // const findByTitle = async (title: string) => {
-// //   const response = await $host.get<Client[]>(`/client?title=${title}`);
-// //   return response.data;
-// // }
-
-// const update = async (
-//   id: any,
-//   { firstName, lastName, secondName, phone, bDate }: Client,
-// ) => {
-//   const response = await $host.put<any>(`/client/${id}`, {
-//     first_name: firstName,
-//     last_name: lastName,
-//     second_name: secondName,
-//     phone,
-//     birth_date: bDate,
-//   });
-//   return response.data;
-// };
-
-// const deleteById = async (id: any) => {
-//   const response = await $host.delete<any>(`/client/${id}`);
-//   return response.data;
-// };
-
-// const fetechAllClientAndCar = () => {
-
-// }
 
 const store = new ClientCollectionStore();
 

@@ -4,7 +4,7 @@
 // const ApiError = require('../error/ApiError');
 // const defaultLimit = process.env.DEFAULT_LIMIT || 5;
 
-class DeviceController {
+class AutoController {
   // async create(req, res, next) {
   //   try {
   //     let { title, price, brandId, typeId, info } = req.body;
@@ -81,16 +81,16 @@ class DeviceController {
   // }
 
   // async getOne(req, res, next) {
-  //   console.log('req', req);
   //   try {
   //     const { id } = req.params;
-  //     const device = await Device.findOne({
+  //     const car = await Auto.findOne({
   //       where: { id },
-  //       include: [{ model: DeviceInfo, as: 'info' }],
+  //       //include: [{ model: CarInfo, as: 'car' }],
   //     });
 
-  //     return res.json(device);
+  //     return res.json(car);
   //   } catch (error) {
+  //     console.log('Error:', error);
   //     next(ApiError.badRequest(error.message));
   //   }
   // }

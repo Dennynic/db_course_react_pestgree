@@ -19,10 +19,6 @@ export const publicRoutes = [
     path: MAIN_PAGE,
     Component: MainPage,
   },
-  // {
-  //   path: CAR_PAGE,
-  //   Component: CarPage,
-  // },
   {
     path: CLIENT_PAGE + '/:id',
     Component: ClientPage,

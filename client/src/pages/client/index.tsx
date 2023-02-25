@@ -13,7 +13,7 @@ import { Client } from '../../models';
 
 //store
 import ClientCollectionStore from '../../store/client-colection-store';
-//import carBrandsStore from '../../store/car-brands-store';
+import carClientService from '../../store/carClientlService';
 
 //styles
 import css from './styles.scss';
@@ -41,8 +41,7 @@ class ClientPage extends Component<IProps, IState> {
     'Место',
     'Дата начисления',
     'Цена места',
-    'Сумма оплаты',
-    'Дата оплаты',
+    'Оплатить',
   ];
 
   constructor(props: IProps) {
@@ -63,6 +62,8 @@ class ClientPage extends Component<IProps, IState> {
   // }
 
   private fetchClient = (id: number) => {
+    console.log('Fetch Client with Car');
+
     this.props.clientsStore?.findByIdWithCars(id);
   };
 
@@ -79,50 +80,66 @@ class ClientPage extends Component<IProps, IState> {
   };
 
   private handleModalCarClose = () => {
-    this.setState({ isModalCarOpen: false });
-  }
+    this.setState({ isModalCarOpen: false, carId: undefined });
+  };
 
   private handleEditCar = (id: number) => {
-    this.setState({carId: id, isModalCarOpen: true });
+    this.setState({ carId: id, isModalCarOpen: true });
   };
 
   private handleEditClient = (clientId: any) => {
+    console.log('clientId', clientId);
     this.setState({ clientId, isModalClientOpen: true });
   };
 
   private handleClientSubmit = (clientData: Client) => {
-    console.log("OnSubmit", clientData);
-    if(clientData.id){
-      const res = this.props.clientsStore?.update(clientData).then(data =>
-        console.log('Клиент обновлен', data),
-      ).catch((error) =>{
-        console.log("Adding Error", error);
-      });
+    console.log('clientData', clientData);
 
-    }else{
-      const res = this.props.clientsStore?.create(clientData).then(data =>
-        console.log('Клиент добавлен', data),
-      ).catch((error) =>{
-        console.log("Adding Error", error);
-      });
+    if (this.state.clientId) {
+      console.log('OnSubmit Update', clientData);
+      const res = this.props.clientsStore
+        ?.update(clientData)
+        .then(data => console.log('Клиент обновлен', data))
+        .catch(error => {
+          console.log('Adding Error', error);
+        });
+    } else {
+      console.log('OnSubmit Create', clientData);
+      const res = this.props.clientsStore
+        ?.create(clientData)
+        .then(data => console.log('Клиент добавлен', data))
+        .catch(error => {
+          console.log('Adding Error', error);
+        });
     }
   };
 
-  private handleCarSubmit = () =>{
-
-  }
+  private handleCarSubmit = async (data: any) => {
+    if (this.state.carId) {
+      console.log('Car update', data);
+      await carClientService.update({ id: this.state.carId, ...data });
+    } else {
+      console.log('Car create', data);
+      await carClientService.createCar({
+        ...data,
+        clientId: this.props.params.id,
+      });
+    }
+    console.log('fetchClient', this.props.params.id);
+    this.fetchClient(Number(this.props.params.id));
+  };
 
   private handleDeleteUser = () => {
-    // const res = ClientService.create(clientData).then(data =>
-    //   console.log('Клиент добавлен', data),
-    // );
-    console.log('Клиент Удален', this.state.clientId);
+    console.log('Клиента нельзя удалять', this.state.clientId);
   };
 
   render() {
-    const {isModalCarOpen, isModalClientOpen} = this.state;
-    const {clientsStore} = this.props;
-   
+    const { isModalCarOpen, isModalClientOpen } = this.state;
+    const { clientsStore } = this.props;
+    console.log('CLient Props', this.props);
+    const [carForEdit] = clientsStore?.client.cars.filter(
+      item => item.id == this.state.carId,
+    )!;
     return (
       <section>
         <Container>
@@ -147,7 +164,11 @@ class ClientPage extends Component<IProps, IState> {
                 </div>
               </div>
               <div className={css.actionButton}>
-                <button onClick={() => this.handleEditClient(clientsStore!.client.id)}>изменить клиента</button> 
+                <button
+                  onClick={() => this.handleEditClient(clientsStore!.client.id)}
+                >
+                  изменить клиента
+                </button>
                 <span>&nbsp;/&nbsp; </span>
                 <button onClick={this.handleDeleteUser}>удалить клиента</button>
               </div>
@@ -155,7 +176,7 @@ class ClientPage extends Component<IProps, IState> {
           </Row>
           <Row>
             <Col>
-            <h2>Автомобили</h2>
+              <h2>Автомобили</h2>
               <Table striped bordered hover>
                 <thead>
                   <tr>
@@ -165,35 +186,49 @@ class ClientPage extends Component<IProps, IState> {
                   </tr>
                 </thead>
                 <tbody>
-                  {clientsStore!.client.cars.map((car, key)=>(
-                    
+                  {clientsStore!.client.cars.map((car, key) => (
                     <tr key={car.regNumber}>
-                    <td>{key+1}</td>
-                    <td>
-                      <button onClick={() => this.handleEditCar(car.id)}>
-                        {car.fullModel}
-                      </button>
-                    </td>
-                    <td>{car.regNumber}</td>
-                    <td>{car.year}</td>
-                    <td>{"-"}</td>
-                                       
-                  </tr>
-                  ))
-                    
-                  }
+                      <td>{key + 1}</td>
+                      <td>
+                        <button onClick={() => this.handleEditCar(car.id)}>
+                          {car.fullModel}
+                        </button>
+                      </td>
+                      <td>{car.regNumber}</td>
+                      <td>{car.year}</td>
+                      <td>{car.place.id}</td>
+                      <td>{car.place.startDate}</td>
+                      <td>{car.place.price}</td>
+                      <td>
+                        <button onClick={this.handleModalCarOpen}>
+                          оплатить
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <button onClick={this.handleModalCarOpen}>Добавить Авто</button>
+            </Col>
+            <Col className={css.paymentButtonContainer}>
+              <button onClick={this.handleModalCarOpen}>
+                История платежей
+              </button>
             </Col>
           </Row>
         </Container>
+
         <AutoFormModal
-                carId ={this.state.carId}
-                onSubmit={this.handleCarSubmit}
-                onClose={this.handleModalCarClose}
-                isOpen={isModalCarOpen}
-              />
+          clientId={clientsStore?.client.id!}
+          car={carForEdit}
+          onSubmit={this.handleCarSubmit}
+          onClose={this.handleModalCarClose}
+          isOpen={isModalCarOpen}
+        />
         <ClientFormModal
           client={clientsStore?.client}
           onClose={this.handleModalClientClose}
