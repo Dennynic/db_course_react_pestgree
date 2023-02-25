@@ -221,7 +221,6 @@ class ClientPage extends Component<IProps, IState> {
             </Col>
           </Row>
         </Container>
-        
 
         <AutoFormModal
           clientId={clientsStore?.client.id!}
