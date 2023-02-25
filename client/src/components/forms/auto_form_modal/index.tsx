@@ -8,35 +8,40 @@ import { inject, observer } from 'mobx-react';
 import { toast } from 'react-toastify';
 
 //models
-import { CarBrandModel, CarModel } from 'models';
-
+import { Car, Place } from '../../../models';
 //store
 import carBrandsStore from '../../../store/car-brands-store';
+//import carClientService from '../../../store/carClientlService';
+import placeStore from '../../../store/place-store';
 
 //styles
 import css from './styles.scss';
 
 interface IProps {
   isOpen: boolean;
-  onSubmit: () => void;
+  onSubmit: (data: any) => void;
   onClose: () => void;
-  carBrands?: CarBrandModel[];
-  carId?: number;
+  car?: Car;
+  clientId?: number;
   carBrandsStore?: typeof carBrandsStore;
+  placeStore?: typeof placeStore;
 }
 
 interface IState {
-  carModels: CarModel[];
   carBrandId: number | null;
-  carModel: string;
+  carModelId: number | null;
   regNumber: string;
   year: string;
+  place: number | null;
   isAlert: boolean;
+  startDate: string;
   alertMessage: string;
   isBrandOpen: boolean;
   isModelOpen: boolean;
+  
 }
 @inject('carBrandsStore')
+@inject('placeStore')
 @observer
 export default class AutoFormModal extends Component<IProps, IState> {
   public addBrandRef: React.RefObject<HTMLInputElement>;
@@ -47,13 +52,18 @@ export default class AutoFormModal extends Component<IProps, IState> {
     this.addBrandRef = React.createRef();
     this.addModelRef = React.createRef();
   }
-
-  state = {
-    carModels: [],
+  defaultCarProps = {
     carBrandId: null,
-    carModel: '',
+    carModelId: null,
     regNumber: '',
     year: '',
+    place: null,
+    startDate: '',
+   
+  };
+
+  state = {
+    ...this.defaultCarProps,
     isAlert: false,
     alertMessage: '',
     isBrandOpen: false,
@@ -62,28 +72,78 @@ export default class AutoFormModal extends Component<IProps, IState> {
 
   componentDidMount() {
     this.fetchCarModels();
+    this.fetchPlaces();
   }
 
   componentDidUpdate(prevProps: IProps): void {
     if (prevProps !== this.props) {
-      const models = this.props.carBrandsStore?.models;
+      if (this.props.car) {
+        const { car } = this.props;
+        const modelsStore = this.props.carBrandsStore?.models;
+        const brand = modelsStore?.filter(item => item.brand == car.brand);
+        const model = brand?.[0].models.filter(item => item.title == car.model);
+        this.setState({
+          carBrandId: brand?.[0].brandid!,
+          carModelId: model?.[0].id!,
+          year: car.year,
+          regNumber: car.regNumber,
+          place: car.place.id,
+          startDate: car.place.startDate, 
+          });
+          
+        
+      } else {
+        this.setState({ ...this.defaultCarProps });
+      }
     }
   }
 
+  // private async fetchCar(id: number) {
+  //   try {
+  //     const car = await carClientService.findCarById(id);
+  //     const modelsStore = this.props.carBrandsStore?.models;
+  //     const brand = modelsStore?.filter(item => item.brand == car.brand);
+  //     const model = brand?.[0].models.filter(item => item.title == car.model);
+
+  //     this.setState({
+  //       carBrandId: brand?.[0].brandid!,
+  //       carModelId: model?.[0].id!,
+  //       year: car.year,
+  //       regNumber: car.regNumber,
+  //     });
+
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   private fetchCarModels() {
-    console.log('this.props.carBrandsStore', this.props.carBrandsStore);
     this.props.carBrandsStore?.fetchList();
   }
 
-  handleBrandChange = (e: any) => {
-    const models = this.props.carBrandsStore?.models;
-    const [modelArr] =
-      models?.filter(item => item.carid == e.target.value) || [];
+  private fetchPlaces() {
+    this.props.placeStore?.findAll();
+  }
 
+  private getVacant = () => {
+    return this.props.placeStore?.places.filter(item => item.isVacant == true);
+  };
+
+  handleBrandChange = (e: any) => {
     this.setState({
-      carModels: modelArr?.models || [],
-      carBrandId: modelArr?.carid,
+      carBrandId: Number(e.target.value),
     });
+  };
+
+  getCarModels = (id: number) => {
+    const modelsStore = this.props.carBrandsStore?.models;
+
+    let models: any[] = [];
+    if (id) {
+      const [model] = modelsStore?.filter(item => item.brandid == id) || [];
+      models = model?.models;
+    }
+    return models;
   };
 
   handleAddBrand = () => {
@@ -93,19 +153,18 @@ export default class AutoFormModal extends Component<IProps, IState> {
       toast('Error Brand Already exist');
     });
   };
+
   handleAddModel = () => {
     const brandId = this.state.carBrandId || undefined;
     const model = this.addModelRef.current!.value;
 
-    console.log('BrandId', brandId, 'Model', this.addModelRef.current!.value);
     this.props.carBrandsStore?.addModel(model.trim(), brandId).catch(error => {
       toast('Error Brand Already exist');
     });
   };
 
- 
   handleModelChange = (e: any) => {
-    console.log('EventModel', e.target.value);
+    this.setState({ carModelId: Number(e.target.value) });
   };
 
   handlRegNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,8 +200,17 @@ export default class AutoFormModal extends Component<IProps, IState> {
     this.setState({ year: e.target.value });
   };
 
-  handleSubmit = () => {
-    console.log('Form submit');
+  handlePlaceChange = (e: any) => {
+    this.setState({ place: Number(e.target.value) });
+  };
+
+  handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ startDate: event.target.value });
+  };
+
+  handleSubmit = (e: any) => {
+    e.preventDefault();
+    this.props.onSubmit?.({ ...this.state });
   };
 
   handleClose = () => {
@@ -150,15 +218,25 @@ export default class AutoFormModal extends Component<IProps, IState> {
   };
 
   render() {
-    console.log('CarProps', this.props.carBrandsStore);
+    console.log('CarProps', this.props);
     console.log('CarState', this.state);
-    const isOpen = true;
-    const isAddBrand = true;
 
-    const { onClose, onSubmit, carBrands } = this.props;
-    const { carModels, regNumber, year, isBrandOpen, isModelOpen, carBrandId } =
-      this.state;
-    const maxValueYear = moment(new Date()).format('YYYY');
+    const { onClose, placeStore, isOpen, car } = this.props;
+    const {
+      regNumber,
+      year,
+      isBrandOpen,
+      isModelOpen,
+      carBrandId,
+      carModelId,
+      startDate,
+    } = this.state;
+
+    const carModels = this.getCarModels(carBrandId!);
+
+    const maxValueYear = new Date().getFullYear();
+    const places = car ? this.props.placeStore?.places : this.getVacant();
+
     const disabledModels = !this.props.carBrandsStore?.models.length;
     const regNumberClassNames = cn(
       css.regNumber,
@@ -174,18 +252,14 @@ export default class AutoFormModal extends Component<IProps, IState> {
       isModelOpen && css.modelModalOpen,
     );
 
-    console.log(
-      '!carBrand',
-      !carBrandId,
-      '!carModels.length',
-      !carModels.length,
-    );
-
     const addModelClassName = cn(
       css.addCarOption,
       !carBrandId && !carModels.length && css.modelDisabled,
     );
 
+    const maxDate = moment(new Date()).format('YYYY-MM-DD');
+    const validDate = moment(startDate).format('YYYY-MM-DD');
+    const title = this.props.car ? 'Редактировать' : 'Добавить';
     return (
       <>
         <FormModal
@@ -193,7 +267,7 @@ export default class AutoFormModal extends Component<IProps, IState> {
           isOpen={isOpen}
           className={css.formWrapper}
         >
-          <FormModal.Header title={`Добавить авто`} />
+          <FormModal.Header title={`${title} авто`} />
           <FormModal.Form onClose={onClose} onSubmit={this.handleSubmit}>
             <Form.Group
               className={cn(css.formGroupSelect, css.formGroupAddBrand)}
@@ -208,7 +282,7 @@ export default class AutoFormModal extends Component<IProps, IState> {
                   this.props.carBrandsStore?.models.map(
                     (model: any, key: number) => {
                       return (
-                        <option key={key} value={model.carid}>
+                        <option key={key} value={model.brandid}>
                           {model.brand}
                         </option>
                       );
@@ -244,10 +318,11 @@ export default class AutoFormModal extends Component<IProps, IState> {
               <Form.Select
                 onChange={this.handleModelChange}
                 disabled={!carModels.length}
+                value={carModelId || ''}
               >
                 <option>Выберите модель</option>
-                {carModels.map((item: any) => (
-                  <option key={item.id} value={item.carid}>
+                {carModels.map((item: any, key) => (
+                  <option key={key} value={item.id}>
                     {item.title}
                   </option>
                 ))}
@@ -295,9 +370,33 @@ export default class AutoFormModal extends Component<IProps, IState> {
                 onChange={this.handleYearChange}
                 value={year}
                 type="number"
-                placeholder="2011"
+                placeholder={maxValueYear.toString()}
                 min={1960}
                 max={maxValueYear}
+                required
+              />
+            </Form.Group>
+            <Form.Group className={css.formGroupText}>
+              <Form.Select
+                onChange={this.handlePlaceChange}
+                disabled={!places?.length}
+                value={this.state.place || ''}
+              >
+                <option>Выберите место</option>
+                {places?.map((item: any, key) => (
+                  <option key={key + "_" + item.id} value={item.id}>
+                    {item.id} - {item.price}р. - {item.isVacant? 'free':'ordered'}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className={css.formGroupText}>
+              <Form.Label>Дата бронирования</Form.Label>
+              <Form.Control
+                onChange={this.handleDateChange}
+                value={validDate}
+                type="date"
+                max={maxDate}
                 required
               />
             </Form.Group>

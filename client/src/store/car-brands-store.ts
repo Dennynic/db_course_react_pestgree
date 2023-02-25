@@ -10,17 +10,17 @@ class CarBrandsStore {
   constructor() {
     makeObservable(this, {
       models: observable,
-      addItems: action,
+      addItemsToStore: action,
     });
   }
 
   fetchList = async () => {
     const response = await $host.get(`/auto`);
-    this.addItems(response.data[0]);
+    this.addItemsToStore(response.data[0]);
     return response;
   };
 
-  addItems = (items: []) => {
+  addItemsToStore = (items: []) => {
     this.models = items;
   };
 
@@ -46,6 +46,8 @@ class CarBrandsStore {
       return Promise.reject(error);
     }
   };
+
+  
 }
 
 const store = new CarBrandsStore();

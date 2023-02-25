@@ -7,6 +7,6 @@ router.put('/', clientController.update);
 
 router.get('/all', clientController.getAllCars);
 router.get('/all/:id', clientController.getClientCar);
-router.get('/:id', clientController.getOne);
+//router.get('/:id', clientController.getOne);
 
 module.exports = router;

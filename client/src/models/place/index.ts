@@ -7,12 +7,12 @@ class Place {
   private _autoId: number| null;
 
  
- constuctor(){
-   this._id = null;
-   this._price = null;
-   this._startDate = '';
-   this._isVacant = true;
-   this._autoId = null;
+ constructor({place, price, startDate, isVacant, autoId}: any){
+   this._id = place;
+   this._price = price;
+   this._startDate = startDate;
+   this._isVacant = !startDate;
+   this._autoId = autoId;
  }
 
  setId(id: number) {

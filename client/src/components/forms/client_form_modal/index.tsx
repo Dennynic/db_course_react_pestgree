@@ -78,9 +78,8 @@ class ClientFormModal extends Component<IProps, IState> {
 
   private handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const { firstName, lastName, secondName, phone, bDate } = this.state;
     console.log('Handle state', this.state);
-    this.props.onSubmit({...this.props.client, ...this.state})
+    this.props.onSubmit({id: this.props.client?.id, ...this.state})
       
   };
 

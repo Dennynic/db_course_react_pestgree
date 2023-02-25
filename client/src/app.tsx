@@ -4,6 +4,7 @@ import NavBar from './components/navbar';
 import Routing from './components/routes';
 import carBrandsStore from 'store/car-brands-store';
 import clientsStore from 'store/client-colection-store';
+import placeStore from 'store/place-store';
 import { Provider } from 'mobx-react';
 
 class App extends Component {
@@ -16,7 +17,8 @@ class App extends Component {
     return (
       <Provider 
       carBrandsStore={carBrandsStore} 
-      clientsStore={clientsStore}>
+      clientsStore={clientsStore}
+        placeStore={placeStore}>
         <BrowserRouter>
           <NavBar />
           <Routing />
