@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
@@ -8,7 +8,8 @@ import ClientCollectionStore from '../../store/client-colection-store';
 import { CarClientModel } from '../../models';
 import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
-import {  CLIENT_PAGE } from 'config/consts';
+import { CLIENT_PAGE } from 'config/consts';
+
 interface IProps {
   clientsStore?: typeof ClientCollectionStore;
 }
@@ -17,7 +18,6 @@ interface IState {
   isModalOpen: boolean;
   client: Client | undefined;
 }
-
 
 @inject('clientsStore')
 @observer
@@ -46,7 +46,6 @@ class MainPage extends Component<IProps, IState> {
     };
   }
   componentDidMount(): void {
-    
     this.fetchClient();
   }
 
@@ -67,16 +66,14 @@ class MainPage extends Component<IProps, IState> {
   };
 
   private handleSubmit = (clientData: Client) => {
-    const res = this.props.clientsStore?.create(clientData).then(data =>
-      console.log('Клиент добавлен', data),
-    );
+    const res = this.props.clientsStore
+      ?.create(clientData)
+      .then(data => console.log('Клиент добавлен', data));
   };
 
   render() {
-    
     const carClients = this.props.clientsStore?.carClients;
-    console.log("carClients", carClients);
-    
+
     return (
       <section>
         <Container>
@@ -93,7 +90,6 @@ class MainPage extends Component<IProps, IState> {
                 </thead>
                 <tbody>
                   {carClients!.map((item: CarClientModel, key) => {
-                    
                     const {
                       clientId,
                       fullName,
@@ -109,13 +105,14 @@ class MainPage extends Component<IProps, IState> {
                       datePayment,
                       startDate,
                     } = item;
-                    const carModel = brand && model ? `${brand} ${model}` : "-";
+                    const carModel = brand && model ? `${brand} ${model}` : '-';
                     return (
                       <tr key={clientId + key}>
-                        <td>{key+1}</td>
+                        <td>{key + 1}</td>
                         <td>
-                          <NavLink to={`${CLIENT_PAGE}/${clientId}`}>{fullName}</NavLink>
-                            
+                          <NavLink to={`${CLIENT_PAGE}/${clientId}`}>
+                            {fullName}
+                          </NavLink>
                         </td>
                         <td>{bDate}</td>
                         <td>{phone}</td>
@@ -132,7 +129,9 @@ class MainPage extends Component<IProps, IState> {
                   })}
                 </tbody>
               </Table>
-              <button onClick={this.handleModalOpen}>Добавить клиента</button>
+              <button className="linkbutton" onClick={this.handleModalOpen}>
+                Добавить клиента
+              </button>
             </Col>
           </Row>
         </Container>

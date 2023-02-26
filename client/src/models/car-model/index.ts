@@ -2,7 +2,7 @@ class CarModel {
   private _id: number | null;
   private _title: string;
 
-  constuctor() {
+  constructor() {
     this._id = null;
     this._title = '';
   }

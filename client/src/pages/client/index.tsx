@@ -13,10 +13,12 @@ import { Client } from '../../models';
 
 //store
 import ClientCollectionStore from '../../store/client-colection-store';
-import carClientService from '../../store/carClientlService';
+import carClientService from '../../store/carClientService';
+import paymentService from '../../store/paymentService';
 
 //styles
 import css from './styles.scss';
+import PaymentFormModal from 'components/forms/payment_form_modal';
 
 interface IProps {
   params: Params;
@@ -27,8 +29,10 @@ interface IProps {
 interface IState {
   isModalClientOpen: boolean;
   isModalCarOpen: boolean;
+  isModalPaymentOpen: boolean;
   clientId?: number;
   carId?: number;
+  placeId: number | null;
 }
 @inject('clientsStore')
 @observer
@@ -50,25 +54,22 @@ class ClientPage extends Component<IProps, IState> {
     this.state = {
       isModalClientOpen: false,
       isModalCarOpen: false,
+      isModalPaymentOpen: false,
+      placeId: null,
     };
   }
   componentDidMount(): void {
     const clientId = Number(this.props.params.id);
+    this.setState({ clientId });
     this.fetchClient(clientId);
   }
 
-  // componentDidUpdate(prevData: any): void {
-  //   console.log('Update Klient', prevData);
-  // }
-
   private fetchClient = (id: number) => {
-    console.log('Fetch Client with Car');
-
     this.props.clientsStore?.findByIdWithCars(id);
   };
 
-  private handleModalClientOpen = () => {
-    this.setState({ isModalClientOpen: true });
+  private handleModalPaymentOpen = (place: number) => {
+    this.setState({ isModalPaymentOpen: true, placeId: place });
   };
 
   private handleModalCarOpen = () => {
@@ -83,18 +84,19 @@ class ClientPage extends Component<IProps, IState> {
     this.setState({ isModalCarOpen: false, carId: undefined });
   };
 
+  private handleModalPaymentClose = () => {
+    this.setState({ isModalPaymentOpen: false, carId: undefined });
+  };
+
   private handleEditCar = (id: number) => {
     this.setState({ carId: id, isModalCarOpen: true });
   };
 
   private handleEditClient = (clientId: any) => {
-    console.log('clientId', clientId);
-    this.setState({ clientId, isModalClientOpen: true });
+    this.setState({ isModalClientOpen: true });
   };
 
   private handleClientSubmit = (clientData: Client) => {
-    console.log('clientData', clientData);
-
     if (this.state.clientId) {
       console.log('OnSubmit Update', clientData);
       const res = this.props.clientsStore
@@ -122,11 +124,17 @@ class ClientPage extends Component<IProps, IState> {
       console.log('Car create', data);
       await carClientService.createCar({
         ...data,
-        clientId: this.props.params.id,
+        clientId: this.state.clientId,
       });
     }
-    console.log('fetchClient', this.props.params.id);
-    this.fetchClient(Number(this.props.params.id));
+
+    this.fetchClient(Number(this.state.clientId));
+  };
+
+  private handlePaymentSubmit = async (data: any) => {
+    console.log('PaymentData', data);
+    const { placeId, clientId } = this.state;
+    await paymentService.addPayment({ placeId, clientId, ...data }).then();
   };
 
   private handleDeleteUser = () => {
@@ -134,9 +142,9 @@ class ClientPage extends Component<IProps, IState> {
   };
 
   render() {
-    const { isModalCarOpen, isModalClientOpen } = this.state;
+    const { isModalCarOpen, isModalClientOpen, isModalPaymentOpen } =
+      this.state;
     const { clientsStore } = this.props;
-    console.log('CLient Props', this.props);
     const [carForEdit] = clientsStore?.client.cars.filter(
       item => item.id == this.state.carId,
     )!;
@@ -163,14 +171,17 @@ class ClientPage extends Component<IProps, IState> {
                   </div>
                 </div>
               </div>
-              <div className={css.actionButton}>
+              <div>
                 <button
+                  className="linkbutton"
                   onClick={() => this.handleEditClient(clientsStore!.client.id)}
                 >
                   изменить клиента
                 </button>
                 <span>&nbsp;/&nbsp; </span>
-                <button onClick={this.handleDeleteUser}>удалить клиента</button>
+                <button className="linkbutton" onClick={this.handleDeleteUser}>
+                  удалить клиента
+                </button>
               </div>
             </Col>
           </Row>
@@ -190,7 +201,10 @@ class ClientPage extends Component<IProps, IState> {
                     <tr key={car.regNumber}>
                       <td>{key + 1}</td>
                       <td>
-                        <button onClick={() => this.handleEditCar(car.id)}>
+                        <button
+                          className="linkbutton"
+                          onClick={() => this.handleEditCar(car.id)}
+                        >
                           {car.fullModel}
                         </button>
                       </td>
@@ -200,7 +214,12 @@ class ClientPage extends Component<IProps, IState> {
                       <td>{car.place.startDate}</td>
                       <td>{car.place.price}</td>
                       <td>
-                        <button onClick={this.handleModalCarOpen}>
+                        <button
+                          className="linkbutton"
+                          onClick={() =>
+                            this.handleModalPaymentOpen(car.place.id!)
+                          }
+                        >
                           оплатить
                         </button>
                       </td>
@@ -212,15 +231,23 @@ class ClientPage extends Component<IProps, IState> {
           </Row>
           <Row>
             <Col>
-              <button onClick={this.handleModalCarOpen}>Добавить Авто</button>
+              <button className="linkbutton" onClick={this.handleModalCarOpen}>
+                Добавить Авто
+              </button>
             </Col>
             <Col className={css.paymentButtonContainer}>
-              <button onClick={this.handleModalCarOpen}>
+              <button className="linkbutton" onClick={this.handleModalCarOpen}>
                 История платежей
               </button>
             </Col>
           </Row>
         </Container>
+        <PaymentFormModal
+          placeId={this.state.placeId!}
+          onSubmit={this.handlePaymentSubmit}
+          onClose={this.handleModalPaymentClose}
+          isOpen={isModalPaymentOpen}
+        />
 
         <AutoFormModal
           clientId={clientsStore?.client.id!}
