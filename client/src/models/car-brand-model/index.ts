@@ -7,7 +7,7 @@ class CarBrandModel {
   private _selectedBrand: number | null;
   private _selectedModel: number | null;
 
-  constuctor() {
+  constructor() {
     this._id = null;
     this._title = '';
     this._models = [];

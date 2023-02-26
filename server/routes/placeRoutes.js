@@ -1,10 +1,8 @@
 const Router = require('express');
 const router = new Router();
-const modelRouter = require('./../controllers/placeController');
+const placeRouter = require('./../controllers/placeController');
 
-router.post('/', modelRouter.create);
-router.get('/', modelRouter.getAll);
-
-
+router.post('/', placeRouter.create);
+router.get('/', placeRouter.getAll);
 
 module.exports = router;
