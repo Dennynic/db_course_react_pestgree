@@ -44,7 +44,7 @@ class PaymentFormModal extends Component<IProps, IState> {
 
   private handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log('Handle state', this.state);
+
     this.props.onSubmit({ ...this.state });
   };
 

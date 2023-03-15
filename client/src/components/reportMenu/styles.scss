@@ -1,0 +1,13 @@
+.reportMenuWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.reportMenuLink {
+  font-variant: small-caps;
+  color: #211f7a;
+
+  &.active {
+  }
+}

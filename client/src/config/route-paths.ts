@@ -7,11 +7,11 @@ import ReportPage from '../pages/report';
 
 import {
   MAIN_PAGE,
-  CAR_PAGE,
+  //CAR_PAGE,
   CLIENT_PAGE,
   PLACE_PAGE,
-  PAYMENT_PAGE,
-  REPORT_PAGE
+  //PAYMENT_PAGE,
+  REPORT_PAGE,
 } from 'config/consts';
 
 export const publicRoutes = [
@@ -23,17 +23,18 @@ export const publicRoutes = [
     path: CLIENT_PAGE + '/:id',
     Component: ClientPage,
   },
-  
+
   {
     path: PLACE_PAGE,
     Component: PlacePage,
   },
+  // {
+  //   path: PAYMENT_PAGE,
+  //   Component: PaymentPage,
+  // },
+
   {
-    path: PAYMENT_PAGE,
-    Component: PaymentPage,
-  },
-  {
-    path: REPORT_PAGE,
+    path: REPORT_PAGE + '/:id',
     Component: ReportPage,
   },
 ];

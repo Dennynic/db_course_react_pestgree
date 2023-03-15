@@ -2,11 +2,13 @@ import React, { Component, FormEvent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
-import ClientFormModal from 'components/forms/client_form_modal';
-import AutoFormModal from 'components/forms/auto_form_modal';
 import { Params, useParams } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+//components
+import PaymentFormModal from 'components/forms/payment_form_modal';
+import ClientFormModal from 'components/forms/client_form_modal';
+import AutoFormModal from 'components/forms/auto_form_modal';
 
 //models
 import { Client } from '../../models';
@@ -18,7 +20,6 @@ import paymentService from '../../store/paymentService';
 
 //styles
 import css from './styles.scss';
-import PaymentFormModal from 'components/forms/payment_form_modal';
 
 interface IProps {
   params: Params;
@@ -98,7 +99,6 @@ class ClientPage extends Component<IProps, IState> {
 
   private handleClientSubmit = (clientData: Client) => {
     if (this.state.clientId) {
-      console.log('OnSubmit Update', clientData);
       const res = this.props.clientsStore
         ?.update(clientData)
         .then(data => console.log('Клиент обновлен', data))
@@ -106,7 +106,6 @@ class ClientPage extends Component<IProps, IState> {
           console.log('Adding Error', error);
         });
     } else {
-      console.log('OnSubmit Create', clientData);
       const res = this.props.clientsStore
         ?.create(clientData)
         .then(data => console.log('Клиент добавлен', data))
@@ -118,10 +117,8 @@ class ClientPage extends Component<IProps, IState> {
 
   private handleCarSubmit = async (data: any) => {
     if (this.state.carId) {
-      console.log('Car update', data);
       await carClientService.update({ id: this.state.carId, ...data });
     } else {
-      console.log('Car create', data);
       await carClientService.createCar({
         ...data,
         clientId: this.state.clientId,
@@ -132,7 +129,6 @@ class ClientPage extends Component<IProps, IState> {
   };
 
   private handlePaymentSubmit = async (data: any) => {
-    console.log('PaymentData', data);
     const { placeId, clientId } = this.state;
     await paymentService.addPayment({ placeId, clientId, ...data }).then();
   };
@@ -250,6 +246,7 @@ class ClientPage extends Component<IProps, IState> {
         />
 
         <AutoFormModal
+          clientCars={clientsStore!.client.cars}
           clientId={clientsStore?.client.id!}
           car={carForEdit}
           onSubmit={this.handleCarSubmit}

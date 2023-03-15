@@ -69,7 +69,7 @@ class ClientController {
 
     try {
       const clientCar = await sequelize.query(request);
-      console.log('ClientCar', clientCar);
+
       return res.json(clientCar[0]);
     } catch (error) {
       console.log('Error:', error);

@@ -27,9 +27,7 @@ class PlacePage extends Component<IProps> {
     this.fetchPlaces();
   }
 
-  componentDidUpdate(prevData: any): void {
-    console.log('Update Place', prevData);
-  }
+  componentDidUpdate(prevData: any): void {}
 
   private fetchPlaces() {
     this.props.placeStore?.findAll();
@@ -41,7 +39,6 @@ class PlacePage extends Component<IProps> {
 
   render() {
     const places = this.props.placeStore?.places || [];
-    console.log('Places', places);
 
     return (
       <section>
