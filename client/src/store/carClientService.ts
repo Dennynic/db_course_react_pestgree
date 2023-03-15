@@ -2,8 +2,8 @@ import { $host } from './lib';
 import { Car } from '../models';
 
 const findAll = async () => {
-  const response = await $host.get('/auto');
-  return response.data;
+  const response = await $host.get('/auto/car');
+  return response.data[0];
 };
 
 const findCarById = async (id: any) => {
@@ -14,6 +14,11 @@ const findCarById = async (id: any) => {
 
 const createCar = async (carData: any) => {
   const response = await $host.post<any>('/auto', carData);
+  return response.data;
+};
+
+const addClientCar = async (carData: any) => {
+  const response = await $host.post<any>('/auto/car/', carData);
   return response.data;
 };
 
@@ -35,7 +40,6 @@ const update = async ({
       place,
       startDate,
     });
-    console.log('Car update response', response);
   } catch (error) {
     console.log(error);
   }
@@ -46,7 +50,7 @@ const CarClientService = {
   findCarById,
   update,
   createCar,
-  //deleteAll
+  addClientCar,
 };
 
 export default CarClientService;

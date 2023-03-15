@@ -18,7 +18,7 @@ class ClientCollectionStore {
   async fetchAllClientInfo() {
     const response = await $host.get<CarClientModel[]>(`/client/all`);
     const model = response.data.map(item => {
-    return createObject(item, CarClientModel) as CarClientModel;
+      return createObject(item, CarClientModel) as CarClientModel;
     });
 
     this.setCarClient(model);
@@ -26,19 +26,18 @@ class ClientCollectionStore {
 
   async create(clientData: Client) {
     const response = await $host.post<Client>('/client', clientData);
-    if(response.data) this.fetchAllClientInfo();
+    if (response.data) this.fetchAllClientInfo();
   }
 
   async update(clientData: Client) {
     const response = await $host.put<Client>('/client', clientData);
-    if(response.data){
-      this.setClient(clientData, this.client);;
-    };
+    if (response.data) {
+      this.setClient(clientData, this.client);
+    }
   }
 
   async findByIdWithCars(id: number) {
     const response = await $host.get<Client[]>(`/client/all/${id}`);
-    console.log("Response", response.data);
     const data = response.data[0];
     this.setClient(data);
   }
@@ -49,7 +48,7 @@ class ClientCollectionStore {
 
   setClient(data: any, oldClient?: Client) {
     let client = oldClient || new Client();
-          
+
     client.setId(data.id!);
     client.setFirstName(data.firstName!);
     client.setLastName(data.lastName!);
@@ -61,10 +60,6 @@ class ClientCollectionStore {
   }
 }
 
-
-
 const store = new ClientCollectionStore();
-
-
 
 export default store;

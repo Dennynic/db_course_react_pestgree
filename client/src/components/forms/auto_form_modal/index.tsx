@@ -7,11 +7,13 @@ import { inject, observer } from 'mobx-react';
 
 import { toast } from 'react-toastify';
 
+import CarListForm from './car_list_form';
+
 //models
 import { Car, Place } from '../../../models';
 //store
 import carBrandsStore from '../../../store/car-brands-store';
-//import carClientService from '../../../store/carClientlService';
+import CarClientService from '../../../store/carClientService';
 import placeStore from '../../../store/place-store';
 
 //styles
@@ -25,6 +27,7 @@ interface IProps {
   clientId?: number;
   carBrandsStore?: typeof carBrandsStore;
   placeStore?: typeof placeStore;
+  clientCars?: Car[];
 }
 
 interface IState {
@@ -38,7 +41,7 @@ interface IState {
   alertMessage: string;
   isBrandOpen: boolean;
   isModelOpen: boolean;
-  
+  isShowCarList: boolean;
 }
 @inject('carBrandsStore')
 @inject('placeStore')
@@ -59,7 +62,6 @@ export default class AutoFormModal extends Component<IProps, IState> {
     year: '',
     place: null,
     startDate: '',
-   
   };
 
   state = {
@@ -68,6 +70,7 @@ export default class AutoFormModal extends Component<IProps, IState> {
     alertMessage: '',
     isBrandOpen: false,
     isModelOpen: false,
+    isShowCarList: false,
   };
 
   componentDidMount() {
@@ -88,10 +91,8 @@ export default class AutoFormModal extends Component<IProps, IState> {
           year: car.year,
           regNumber: car.regNumber,
           place: car.place.id,
-          startDate: car.place.startDate, 
-          });
-          
-        
+          startDate: car.place.startDate,
+        });
       } else {
         this.setState({ ...this.defaultCarProps });
       }
@@ -208,20 +209,30 @@ export default class AutoFormModal extends Component<IProps, IState> {
     this.setState({ startDate: event.target.value });
   };
 
+  handleShowCarList = () => {
+    this.setState({ isShowCarList: !this.state.isShowCarList });
+  };
+
+  handleSelectExistCar = (carId: number) => {
+    CarClientService.addClientCar({
+      clientId: this.props.clientId,
+      autoId: carId,
+    });
+    this.handleClose();
+  };
+
   handleSubmit = (e: any) => {
     e.preventDefault();
     this.props.onSubmit?.({ ...this.state });
   };
 
   handleClose = () => {
+    this.setState({ isShowCarList: false });
     this.props.onClose?.();
   };
 
   render() {
-    console.log('CarProps', this.props);
-    console.log('CarState', this.state);
-
-    const { onClose, placeStore, isOpen, car } = this.props;
+    const { onClose, isOpen, car } = this.props;
     const {
       regNumber,
       year,
@@ -230,6 +241,7 @@ export default class AutoFormModal extends Component<IProps, IState> {
       carBrandId,
       carModelId,
       startDate,
+      isShowCarList,
     } = this.state;
 
     const carModels = this.getCarModels(carBrandId!);
@@ -352,6 +364,22 @@ export default class AutoFormModal extends Component<IProps, IState> {
                 </button>
               </div>
             </div>
+            <div className={css.addCarFromList}>
+              <button
+                className="linkbutton"
+                type="button"
+                onClick={this.handleShowCarList}
+              >
+                из списка
+              </button>
+            </div>
+            {isShowCarList && (
+              <CarListForm
+                onChange={this.handleSelectExistCar}
+                classNames={css.formGroupText}
+                clientCars={this.props.clientCars}
+              />
+            )}
             <Form.Group className={css.formGroupText}>
               <Form.Label className={regNumberClassNames}>
                 Регистрационный номер
@@ -384,8 +412,9 @@ export default class AutoFormModal extends Component<IProps, IState> {
               >
                 <option>Выберите место</option>
                 {places?.map((item: any, key) => (
-                  <option key={key + "_" + item.id} value={item.id}>
-                    {item.id} - {item.price}р. - {item.isVacant? 'free':'ordered'}
+                  <option key={key + '_' + item.id} value={item.id}>
+                    {item.id} - {item.price}р. -{' '}
+                    {item.isVacant ? 'free' : 'ordered'}
                   </option>
                 ))}
               </Form.Select>

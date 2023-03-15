@@ -1,4 +1,4 @@
-import React, { Component, FormEvent } from 'react';
+import React, { Component } from 'react';
 import FormModal from '../form_modal';
 import Form from 'react-bootstrap/Form';
 import Client from '../../../models/client';
@@ -78,9 +78,8 @@ class ClientFormModal extends Component<IProps, IState> {
 
   private handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log('Handle state', this.state);
-    this.props.onSubmit({id: this.props.client?.id, ...this.state})
-      
+
+    this.props.onSubmit({ id: this.props.client?.id, ...this.state });
   };
 
   render() {

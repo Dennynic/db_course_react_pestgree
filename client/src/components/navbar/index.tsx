@@ -4,32 +4,23 @@ import Nav from 'react-bootstrap/Nav';
 import NavMenu from '../navbar/nav-menu';
 import css from './index.scss';
 
-import { MAIN_PAGE, REPORT_PAGE, PLACE_PAGE, CAR_PAGE, CLIENT_PAGE } from 'config/consts';
+import { MAIN_PAGE, REPORT_PAGE, PLACE_PAGE } from 'config/consts';
 
 const menuItems = [
   {
     title: 'Авто-Клиент',
-    itemLink: MAIN_PAGE
+    itemLink: MAIN_PAGE,
   },
-  {
-    title: 'Клиент',
-    itemLink: CLIENT_PAGE,
-  },
-  {
-    title: 'Авто',
-    itemLink: CAR_PAGE
-  },
+
   {
     title: 'Места',
-    itemLink: PLACE_PAGE
+    itemLink: PLACE_PAGE,
   },
   {
     title: 'Отчеты',
-    itemLink: REPORT_PAGE
+    itemLink: REPORT_PAGE,
   },
-
-]
-
+];
 
 function NavBar() {
   return (
@@ -40,7 +31,7 @@ function NavBar() {
         className="justify-content-center ml-auto d-flex"
         style={{ gap: 10 }}
       >
-        <NavMenu items = {menuItems} />
+        <NavMenu items={menuItems} />
       </Nav>
     </Container>
   );

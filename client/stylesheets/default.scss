@@ -44,3 +44,10 @@ button.linkbutton {
   font-variant: all-small-caps;
   line-height: 14px;
 }
+
+.reportMenuLink.active {
+  background-color: #261680;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 5px;
+}

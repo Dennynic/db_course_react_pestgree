@@ -1,0 +1,33 @@
+.datePickerWrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  & > * {
+    width: 100%;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  padding: 0px 0px 2px;
+  & > button {
+    font-size: 12px;
+  }
+}
+
+.minDebtTable {
+  & tbody > tr:nth-child(1) {
+    border-bottom: 1px solid red;
+    border-left: 1px solid red;
+    border-right: 1px solid red;
+    & > td {
+      border-top: 1px solid red;
+      border-left-color: #dee2e6;
+      border-right: none;
+      border-left-style: inset;
+    }
+  }
+}

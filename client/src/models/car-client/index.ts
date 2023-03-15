@@ -1,4 +1,3 @@
-
 class CarClientModel {
   private _carId: number;
   private _clientId: number;
@@ -16,8 +15,6 @@ class CarClientModel {
   private _summPayment: number;
   private _datePayment: string;
   private _startDate: string;
-  
-
 
   constructor({
     carId,
@@ -33,8 +30,8 @@ class CarClientModel {
     year,
     placeid,
     price,
-    summPayment,
-    datePayment,
+    summ,
+    paymentDate,
     startDate,
   }: any) {
     this._carId = carId;
@@ -44,14 +41,14 @@ class CarClientModel {
     this._secondName = secondName;
     this._phone = phone;
     this._bDate = bDate;
-    this._model = model ;
+    this._model = model;
     this._brand = brand;
     this._regNumber = regNumber;
     this._year = year;
     this._placeid = placeid;
     this._price = price;
-    this._summPayment = summPayment;
-    this._datePayment = datePayment;
+    this._summPayment = summ;
+    this._datePayment = paymentDate;
     this._startDate = startDate;
   }
 
@@ -160,7 +157,7 @@ class CarClientModel {
   }
 
   get carModel() {
-    return `${this._brand} ${ this._model}`;
+    return `${this._brand} ${this._model}`;
   }
 }
 
